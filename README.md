@@ -13,7 +13,9 @@ dan tetap bisa dipakai tanpa internet setelah sekali dibuka.
 | `index.html` | Kerangka aplikasi (Tailwind CDN + Font Awesome) |
 | `.github/workflows/pages.yml` | Deploy otomatis ke GitHub Pages tiap push ke `main` |
 | `app.js` | Seluruh logika: mesin adaptif, sesi, rapor, target |
-| `data/bank-*.js` | Bank soal per mata uji beserta pembahasan (275 soal) |
+| `data/bank-*.js` | Bank soal per mata uji beserta pembahasan (337 soal) |
+| `data/tka2025.js` | Kunci dan pembahasan tiap nomor soal asli TKA 2025 (Biologi & Kimia) |
+| `data/bank-tka25-*.js` | Paket soal tiruan dan variasi yang meniru tiap nomor TKA 2025 |
 | `data/materi.js` | Ringkasan materi, rumus kunci, dan jebakan tiap topik (77 kartu) |
 | `sw.js`, `manifest.json` | Dukungan offline & pemasangan ke layar utama (PWA) |
 
@@ -39,6 +41,9 @@ dan tetap bisa dipakai tanpa internet setelah sekali dibuka.
   lewat menu ⚙.
 - **Rapor belajar** — ringkasan 7 hari / 30 hari / seluruh waktu yang bisa dibagikan lewat
   WhatsApp, tombol Bagikan bawaan HP, disalin, atau dicetak ke PDF.
+- **Paket TKA 2025** — kunci dan pembahasan tiap nomor naskah asli tahun lalu (naskah yang beredar
+  tidak memuat kunci), ditambah soal tiruan 1 : 1 per nomor dan soal variasi yang menguji konsep sama
+  dengan angka serta konteks berbeda.
 - **Ringkasan materi** — 77 kartu konsep, rumus kunci, dan jebakan yang sering menjebak, muncul
   otomatis saat menjawab salah dan bisa dibaca sendiri di halaman Materi.
 - **Simulasi hari-H** — lima mata uji penuh, boleh dicicil satu mata uji per hari sesuai aturan
@@ -82,10 +87,19 @@ Tambahkan objek ke salah satu `data/bank-*.js`:
 - `m`: `bindo` | `mtk` | `bing` | `bio` | `kim`
 - `lv`: 1 dasar · 2 sedang · 3 HOTS
 - `tipe`: `pg` (pilihan ganda, `a` = indeks kunci) · `bs` (benar–salah, pakai `st:[{p,b}]`) ·
-  `isian` (jawaban singkat, `a` kunci utama, `alt` alternatif)
+  `jamak` (pilihan jamak, `a` = array indeks kunci) · `isian` (jawaban singkat, `a` kunci utama, `alt` alternatif)
+- `pkt`: `TKA25` untuk soal tiruan naskah 2025, `TKA25V` untuk variasinya; `no` menandai nomor asalnya
 
 Setelah menambah soal, naikkan versi cache di `sw.js` (`const CACHE = 'arai-prep-v2'`) supaya
 perangkat mengambil versi terbaru.
+
+## Sumber soal
+
+Seluruh butir soal di aplikasi ini ditulis sendiri, bukan salinan naskah ujian mana pun. Untuk paket
+TKA 2025, yang dijadikan acuan adalah struktur resminya (elemen, subelemen, indikator, bentuk soal,
+dan tingkat kesulitan tiap nomor) pada naskah yang beredar di m4th-lab.net; butirnya kemudian ditulis
+ulang dengan konteks dan angka berbeda. Kunci serta pembahasan pada `data/tka2025.js` adalah hasil
+analisis sendiri karena naskah aslinya tidak memuat kunci maupun pembahasan.
 
 ## Catatan tentang angka target
 

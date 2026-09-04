@@ -234,6 +234,11 @@ function periksa(q,jwb){
   if(jwb==null) return false;
   if(q.tipe==='pg') return jwb===q.a;
   if(q.tipe==='bs') return Array.isArray(jwb) && q.st.every((s,i)=>jwb[i]===s.b);
+  if(q.tipe==='jamak'){
+    if(!Array.isArray(jwb)) return false;
+    const pilih=jwb.slice().sort((a,b)=>a-b), kunci=q.a.slice().sort((a,b)=>a-b);
+    return pilih.length===kunci.length && pilih.every((x,i)=>x===kunci[i]);
+  }
   if(q.tipe==='isian') return [q.a].concat(q.alt||[]).map(normalisasi).includes(normalisasi(jwb));
   return false;
 }
@@ -289,7 +294,7 @@ function render(){
   setNav(rute);
   window.scrollTo(0,0);
   if(SESI && rute!=='kerja'){ simpanSesiAktif(); hentikanTimer(); SESI=null; }
-  const peta = {beranda:viewBeranda, latihan:viewLatihan, tryout:viewTryout, analisis:viewAnalisis, snbp:viewTarget, target:viewTarget, rapor:viewRapor, materi:viewMateri, simulasi:viewSimulasi, ortu:viewOrtu,
+  const peta = {beranda:viewBeranda, latihan:viewLatihan, tryout:viewTryout, analisis:viewAnalisis, snbp:viewTarget, target:viewTarget, rapor:viewRapor, tka2025:viewTka2025, materi:viewMateri, simulasi:viewSimulasi, ortu:viewOrtu,
                 rencana:viewRencana, jurnal:viewJurnal, pengaturan:viewPengaturan, kerja:viewKerja, hasil:viewHasil};
   $('#view').innerHTML = (peta[rute]||viewBeranda)();
   if(rute==='kerja') setelahRenderSoal();
@@ -411,12 +416,12 @@ function viewBeranda(){
   </section>`:''}
 
   <section class="grid grid-cols-3 gap-2 mb-3">
-    <a href="#/materi" class="card p-3 text-center"><i class="fa-solid fa-book-open text-sky-500 text-xl"></i><p class="text-xs font-semibold mt-1">Materi</p><p class="text-[10px] text-slate-500">rumus & konsep</p></a>
-    <a href="#/simulasi" class="card p-3 text-center"><i class="fa-solid fa-calendar-check text-violet-500 text-xl"></i><p class="text-xs font-semibold mt-1">Simulasi</p><p class="text-[10px] text-slate-500">5 mata uji</p></a>
-    <a href="#/ortu" class="card p-3 text-center"><i class="fa-solid fa-user-shield text-amber-500 text-xl"></i><p class="text-xs font-semibold mt-1">Abi &amp; Ummi</p><p class="text-[10px] text-slate-500">pantau & pesan</p></a>
+    <a href="#/tka2025" class="card p-3 text-center ring-1 ring-violet-200"><i class="fa-solid fa-file-pen text-violet-500 text-xl"></i><p class="text-xs font-semibold mt-1">TKA 2025</p><p class="text-[10px] text-slate-500">soal asli + kunci</p></a>
+    <a href="#/materi" class="card p-3 text-center"><i class="fa-solid fa-book-open text-sky-500 text-xl"></i><p class="text-xs font-semibold mt-1">Materi</p><p class="text-[10px] text-slate-500">rumus &amp; konsep</p></a>
+    <a href="#/simulasi" class="card p-3 text-center"><i class="fa-solid fa-calendar-check text-emerald-500 text-xl"></i><p class="text-xs font-semibold mt-1">Simulasi</p><p class="text-[10px] text-slate-500">5 mata uji</p></a>
   </section>
   <section class="grid grid-cols-3 gap-2 mb-3">
-    <a href="#/rapor" class="card p-3 text-center"><i class="fa-solid fa-file-lines text-violet-500 text-xl"></i><p class="text-xs font-semibold mt-1">Rapor</p><p class="text-[10px] text-slate-500">kirim ke Abi/Ummi</p></a>
+    <a href="#/ortu" class="card p-3 text-center"><i class="fa-solid fa-user-shield text-amber-500 text-xl"></i><p class="text-xs font-semibold mt-1">Abi &amp; Ummi</p><p class="text-[10px] text-slate-500">pantau &amp; rapor</p></a>
     <a href="#/jurnal" class="card p-3 text-center"><i class="fa-solid fa-book-bookmark text-indigo-500 text-xl"></i><p class="text-xs font-semibold mt-1">Jurnal salah</p><p class="text-[10px] text-slate-500">${S.jurnal.length} catatan</p></a>
     <a href="#/target" class="card p-3 text-center"><i class="fa-solid fa-bullseye text-emerald-500 text-xl"></i><p class="text-xs font-semibold mt-1">Target FK</p><p class="text-[10px] text-slate-500">patokan kampus</p></a>
   </section>
@@ -443,6 +448,7 @@ function viewLatihan(){
     <h2 class="text-lg font-extrabold mb-1">Latihan soal</h2>
     <p class="text-xs text-slate-500 mb-3">Sistem memilih soal yang peluang benarnya sekitar 75% bagi ${esc(namaPanggil())} — cukup menantang untuk naik level, tidak sampai bikin patah semangat.</p>
     <button onclick="mulaiBerkelanjutan()" class="w-full btn bg-indigo-600 text-white py-3.5 text-sm mb-2"><i class="fa-solid fa-infinity mr-1"></i>Belajar berkelanjutan (tanpa batas soal)</button>
+    <a href="#/tka2025" class="w-full btn bg-violet-600 text-white py-3 text-sm mb-2 block text-center"><i class="fa-solid fa-file-pen mr-1"></i>Paket soal TKA 2025 + pembahasan</a>
     <div class="grid grid-cols-2 gap-2">
       <button onclick="mulaiCepat()" class="btn bg-slate-800 text-white py-3 text-sm"><i class="fa-solid fa-bolt mr-1"></i>Adaptif (10)</button>
       <button onclick="mulaiSesi({mode:'salah',mapel:'semua',n:15,judul:'Bank soal salah'})" class="btn bg-rose-500 text-white py-3 text-sm"><i class="fa-solid fa-repeat mr-1"></i>Pernah salah</button>
@@ -561,6 +567,18 @@ function viewKerja(){
       return `<button class="${k}" onclick="pilihJawaban(${i})" ${dikunci?'disabled':''}>
         <span class="font-bold text-slate-400">${String.fromCharCode(65+i)}.</span><span>${esc(o)}</span></button>`;
     }).join('');
+  } else if(q.tipe==='jamak'){
+    const dipilih = Array.isArray(jwb)?jwb:[];
+    isi = `<p class="text-[11px] text-slate-500 mb-2"><i class="fa-solid fa-hand-pointer mr-1"></i>Pilih semua yang benar — jawaban benar lebih dari satu.</p>` +
+      q.o.map((o,i)=>{
+        let k='opt w-full text-left px-3 py-2.5 mb-2 text-sm flex gap-2 items-start';
+        const ada = dipilih.includes(i), kunci = q.a.includes(i);
+        if(dikunci){ if(kunci) k+=' benar'; else if(ada) k+=' salah'; }
+        else if(ada) k+=' sel';
+        return `<button class="${k}" onclick="pilihJamak(${i})" ${dikunci?'disabled':''}>
+          <span class="w-5 h-5 rounded border-2 ${ada?'bg-indigo-600 border-indigo-600 text-white':'border-slate-300'} flex items-center justify-center shrink-0 text-[10px]">${ada?'<i class="fa-solid fa-check"></i>':''}</span>
+          <span>${esc(o)}${dikunci&&kunci?' <span class="text-[10px] text-emerald-700 font-bold">(kunci)</span>':''}</span></button>`;
+      }).join('');
   } else if(q.tipe==='bs'){
     isi=q.st.map((s,i)=>{
       const v=jwb?jwb[i]:null;
@@ -601,7 +619,8 @@ function viewKerja(){
       <span class="bg-${MAPEL[q.m].w}-50 text-${MAPEL[q.m].w}-700 rounded px-2 py-0.5 font-semibold">${MAPEL[q.m].sing}</span>
       <span class="ml-1">${esc(q.t)}</span>
       <span class="ml-1">· ${q.lv===3?'HOTS':q.lv===2?'Sedang':'Dasar'}</span>
-      <span class="ml-1">· ${q.tipe==='pg'?'Pilihan ganda':q.tipe==='bs'?'Benar–salah':'Isian singkat'}</span>
+      <span class="ml-1">· ${q.tipe==='pg'?'Pilihan ganda':q.tipe==='bs'?'Benar–salah':q.tipe==='jamak'?'Pilihan jamak':'Isian singkat'}</span>
+      ${q.pkt?`<span class="ml-1 bg-violet-100 text-violet-700 rounded px-1.5 py-0.5 font-semibold">${esc(q.asal||'Paket TKA 2025')}</span>`:''}
       ${!SESI.tryout?`<span class="ml-1 text-slate-400">· peluang benarmu ±${pelu}%</span>`:''}
     </div>
     ${q.s?`<div class="bg-slate-50 border-l-4 border-slate-300 rounded-r-lg p-3 text-sm mb-3 leading-relaxed">${esc(q.s)}</div>`:''}
@@ -659,6 +678,13 @@ function pilihJawaban(i){
   SESI.jawaban[SESI.i]=i;
   if(SESI.langsung) kunciJawaban(); else { simpanSesiAktif(); render(); }
 }
+function pilihJamak(i){
+  if(SESI.dikunci[SESI.i]) return;
+  const kini = Array.isArray(SESI.jawaban[SESI.i]) ? SESI.jawaban[SESI.i].slice() : [];
+  const pos = kini.indexOf(i);
+  if(pos>=0) kini.splice(pos,1); else kini.push(i);
+  SESI.jawaban[SESI.i] = kini; simpanSesiAktif(); render();
+}
 function pilihBS(i,v){
   if(SESI.dikunci[SESI.i]) return;
   SESI.jawaban[SESI.i]=SESI.jawaban[SESI.i]||new Array(SESI.soal[SESI.i].st.length).fill(null);
@@ -666,7 +692,7 @@ function pilihBS(i,v){
 }
 function kunciJawaban(){
   const q=SESI.soal[SESI.i], j=SESI.jawaban[SESI.i];
-  if(j==null||(q.tipe==='bs'&&j.some(x=>x==null))||(q.tipe==='isian'&&!String(j).trim())){ alert('Isi jawabanmu dulu ya.'); return; }
+  if(j==null||(q.tipe==='bs'&&j.some(x=>x==null))||(q.tipe==='isian'&&!String(j).trim())||(q.tipe==='jamak'&&(!j.length))){ alert('Isi jawabanmu dulu ya.'); return; }
   const detik=Math.round((Date.now()-MULAI_SOAL)/1000);
   SESI.waktuSoal[SESI.i]=detik;
   SESI.dikunci[SESI.i]=true;
@@ -758,6 +784,7 @@ function viewHasil(){
         ${o.q.tipe==='pg'?`<p class="text-sm mt-1 text-emerald-700"><b>Kunci:</b> ${String.fromCharCode(65+o.q.a)}. ${esc(o.q.o[o.q.a])}</p>`:''}
         ${o.q.tipe==='isian'?`<p class="text-sm mt-1 text-emerald-700"><b>Kunci:</b> ${esc(o.q.a)}</p>`:''}
         ${o.q.tipe==='bs'?`<ul class="text-sm mt-1 text-emerald-700 list-disc ml-5">${o.q.st.map(s=>`<li>${esc(s.p)} — <b>${s.b?'Benar':'Salah'}</b></li>`).join('')}</ul>`:''}
+        ${o.q.tipe==='jamak'?`<p class="text-sm mt-1 text-emerald-700"><b>Kunci:</b> ${o.q.a.map(i=>esc(o.q.o[i])).join(' · ')}</p>`:''}
         <p class="text-sm mt-2 text-slate-700 leading-relaxed">${esc(o.q.e)}</p>
       </details>`).join('') : '<p class="text-xs text-emerald-600 font-semibold">Sempurna! Tidak ada yang salah pada sesi ini.</p>'}
   </section>`;
@@ -1297,6 +1324,68 @@ function kirimPesan(){
 function hapusPesan(dari,teks){
   const kunci = dari==='Abi'?'pesanAbi':'pesanUmmi';
   S.profil[kunci]=(S.profil[kunci]||[]).filter(x=>x!==teks); simpan(); render();
+}
+
+/* ---------- PAKET TKA 2025 (soal asli tahun lalu) ---------- */
+const T25 = () => (window.TKA2025||{});
+function jumlahPkt(m,p){ return BANK().filter(q=>q.m===m && q.pkt===p).length; }
+function viewTka2025(){
+  const mp = (location.hash.split('?')[1]||'').replace('m=','') || 'bio';
+  const daftar = (T25()[mp]||[]);
+  const ada = Object.keys(T25());
+  return `
+  <section class="card p-4 mb-3">
+    <h2 class="text-lg font-extrabold">Soal asli TKA 2025</h2>
+    <p class="text-xs text-slate-500 mt-1">Naskah asli beredar tanpa kunci dan tanpa pembahasan. Di sini tersedia <b>kunci hasil analisis dan pembahasan lengkap</b> tiap nomor, ditambah paket soal tiruan yang bisa dikerjakan langsung.</p>
+    <div class="flex gap-2 mt-3 flex-wrap">
+      ${URUT_MAPEL.filter(m=>ada.includes(m)).map(m=>`<button onclick="location.hash='#/tka2025?m=${m}'" class="btn text-xs px-3 py-2 ${mp===m?'bg-indigo-600 text-white':'bg-slate-100 text-slate-600'}">${MAPEL[m].sing} (${(T25()[m]||[]).length})</button>`).join('')}
+    </div>
+    ${ada.includes(mp)?`<div class="grid grid-cols-2 gap-2 mt-3">
+      <button onclick="mulaiPaket('${mp}','TKA25')" class="btn bg-violet-600 text-white py-3 text-sm"><i class="fa-solid fa-file-pen mr-1"></i>Kerjakan replika (${jumlahPkt(mp,'TKA25')})</button>
+      <button onclick="mulaiPaket('${mp}','TKA25V')" class="btn bg-slate-800 text-white py-3 text-sm"><i class="fa-solid fa-clone mr-1"></i>Soal variasi (${jumlahPkt(mp,'TKA25V')})</button>
+    </div>`:''}
+  </section>
+
+  <section class="card p-4 mb-3 bg-amber-50 border-amber-200">
+    <p class="text-xs text-amber-900"><i class="fa-solid fa-lightbulb mr-1"></i><b>Cara pakai yang paling efektif:</b>
+    buka berkas PDF soal aslinya, kerjakan satu mata uji tanpa melihat apa pun, baru cocokkan dengan kunci di bawah dan baca pembahasannya.
+    Setelah itu kerjakan paket replika di aplikasi — soalnya berbeda angka dan konteks tetapi menguji konsep yang persis sama, sehingga ketahuan apakah ARAI benar-benar paham atau sekadar ingat jawaban.</p>
+  </section>
+
+  <section class="card p-4">
+    <h3 class="font-bold mb-2">Kunci &amp; pembahasan · ${MAPEL[mp]?MAPEL[mp].nama:''}</h3>
+    ${daftar.length? daftar.map(d=>`
+      <details class="border border-slate-200 rounded-xl p-3 mb-2">
+        <summary class="text-sm font-semibold cursor-pointer flex items-start gap-2">
+          <span class="bg-slate-900 text-white rounded-lg px-2 py-0.5 text-[11px] shrink-0">No ${d.no}</span>
+          <span class="flex-1">${esc(d.ringkas)}</span>
+        </summary>
+        <div class="mt-2 text-[11px] text-slate-500">${esc(d.el)} · ${esc(d.sub)}<br>Indikator: ${esc(d.ind)} · Bentuk: ${d.tipe==='pg'?'pilihan ganda':d.tipe==='bs'?'benar–salah':d.tipe==='jamak'?'pilihan jamak':d.tipe==='sesuai'?'sesuai / tidak sesuai':esc(d.tipe)}</div>
+        <p class="text-sm mt-2 bg-emerald-50 border border-emerald-200 rounded-lg p-2"><b class="text-emerald-800">Kunci:</b> ${esc(d.kunci)}</p>
+        <p class="text-sm mt-2 text-slate-700 leading-relaxed">${esc(d.pembahasan)}</p>
+        <p class="text-xs mt-2 bg-sky-50 border border-sky-200 rounded-lg p-2 text-sky-900"><b>Konsep yang diuji:</b> ${esc(d.konsep)}</p>
+        ${d.catatan?`<p class="text-xs mt-2 bg-amber-50 border border-amber-200 rounded-lg p-2 text-amber-900"><b>Catatan:</b> ${esc(d.catatan)}</p>`:''}
+        ${(function(){ const r=BANK().find(q=>q.pkt==='TKA25'&&q.m===mp&&q.no===d.no);
+          return r?`<button onclick="mulaiSatuSoal('${r.id}')" class="btn text-[11px] bg-indigo-600 text-white px-3 py-1.5 mt-2">Kerjakan soal tiruan nomor ini</button>`:''; })()}
+      </details>`).join('') : '<p class="text-xs text-slate-400">Mata uji ini belum tersedia. Kirimkan berkas soalnya untuk ditambahkan.</p>'}
+  </section>`;
+}
+function mulaiPaket(m,pkt){
+  const soal = BANK().filter(q=>q.m===m && q.pkt===pkt).sort((a,b)=>a.no-b.no);
+  if(!soal.length){ alert('Paket belum tersedia untuk mata uji ini.'); return; }
+  SESI = {soal, i:0, jawaban:new Array(soal.length).fill(null), dikunci:new Array(soal.length).fill(false),
+          judul:(pkt==='TKA25'?'Replika TKA 2025 · ':'Variasi TKA 2025 · ')+MAPEL[m].nama,
+          tryout:null, simulasi:null, tanpaBatas:false, mapel:m, topik:null, mode:'paket',
+          sisa:null, mulai:Date.now(), langsung:true, ratingAwal:S.rating.umum, waktuSoal:[]};
+  MULAI_SOAL=Date.now(); simpanSesiAktif();
+  location.hash='#/kerja'; render();
+}
+function mulaiSatuSoal(id){
+  const q = BANK().find(x=>x.id===id); if(!q) return;
+  SESI = {soal:[q], i:0, jawaban:[null], dikunci:[false], judul:q.asal||'Soal tiruan', tryout:null, simulasi:null,
+          tanpaBatas:false, mapel:q.m, topik:q.t, mode:'paket', sisa:null, mulai:Date.now(), langsung:true,
+          ratingAwal:S.rating.umum, waktuSoal:[]};
+  MULAI_SOAL=Date.now(); simpanSesiAktif(); location.hash='#/kerja'; render();
 }
 
 /* ---------- RAPOR (bisa dibagikan ke Abi / Ummi) ---------- */
