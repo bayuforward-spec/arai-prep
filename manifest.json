@@ -1,0 +1,14 @@
+{
+  "name": "ARAI Prep — TKA & SNBP Kedokteran",
+  "short_name": "ARAI Prep",
+  "description": "Latihan adaptif TKA dan persiapan SNBP Fakultas Kedokteran.",
+  "start_url": "./index.html#/beranda",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait",
+  "icons": [
+    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+  ]
+}
