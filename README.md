@@ -13,8 +13,8 @@ dan tetap bisa dipakai tanpa internet setelah sekali dibuka.
 | `index.html` | Kerangka aplikasi (Tailwind CDN + Font Awesome) |
 | `.github/workflows/pages.yml` | Deploy otomatis ke GitHub Pages tiap push ke `main` |
 | `app.js` | Seluruh logika: mesin adaptif, sesi, rapor, target |
-| `data/bank-*.js` | Bank soal per mata uji beserta pembahasan (337 soal) |
-| `data/tka2025.js` | Kunci dan pembahasan tiap nomor soal asli TKA 2025 (Biologi & Kimia) |
+| `data/bank-*.js` | Bank soal per mata uji beserta pembahasan (360 soal) |
+| `data/tka2025.js` | Kunci dan pembahasan tiap nomor soal asli TKA 2025 (Biologi, Kimia, Matematika) |
 | `data/bank-tka25-*.js` | Paket soal tiruan dan variasi yang meniru tiap nomor TKA 2025 |
 | `data/materi.js` | Ringkasan materi, rumus kunci, dan jebakan tiap topik (77 kartu) |
 | `sw.js`, `manifest.json` | Dukungan offline & pemasangan ke layar utama (PWA) |

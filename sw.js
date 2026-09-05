@@ -1,13 +1,13 @@
 /* Service worker: aplikasi tetap jalan tanpa internet.
    Strategi: network-first untuk halaman dan skrip supaya pembaruan langsung terpakai,
    cache dipakai sebagai cadangan ketika jaringan tidak tersedia. */
-const CACHE = 'arai-prep-v4';
+const CACHE = 'arai-prep-v5';
 const ASET = [
   './', './index.html', './app.js', './manifest.json', './icon.svg',
   './data/materi.js', './data/tka2025.js',
   './data/bank-bindo.js', './data/bank-mtk.js', './data/bank-bing.js',
   './data/bank-bio.js', './data/bank-kim.js',
-  './data/bank-tka25-bio.js', './data/bank-tka25-kim.js'
+  './data/bank-tka25-bio.js', './data/bank-tka25-kim.js', './data/bank-tka25-mtk.js'
 ];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASET)).then(() => self.skipWaiting()));

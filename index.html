@@ -68,7 +68,7 @@
 
 <script>
 /* Penangkap galat: layar kosong diganti pesan yang bisa dibaca dan dilaporkan. */
-window.APP_VERSI = 'v4 · 5 Sep 2026';
+window.APP_VERSI = 'v5 · 5 Sep 2026';
 function paksaMuatUlang(){
   try{
     if('serviceWorker' in navigator){ navigator.serviceWorker.getRegistrations().then(function(rs){ rs.forEach(function(r){ r.unregister(); }); }); }
@@ -101,6 +101,7 @@ window.addEventListener('error', function(e){
 <script src="data/bank-kim.js"></script>
 <script src="data/bank-tka25-bio.js"></script>
 <script src="data/bank-tka25-kim.js"></script>
+<script src="data/bank-tka25-mtk.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

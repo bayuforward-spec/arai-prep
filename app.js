@@ -1602,7 +1602,7 @@ function viewPengaturan(){
       <div class="flex justify-between"><span>Pembahasan TKA 2025</span><b>${Object.values(T25()).reduce((a,b)=>a+b.length,0)} nomor</b></div>
       <div class="flex justify-between"><span>Mode offline</span><b>${('serviceWorker' in navigator)?'aktif':'tidak didukung'}</b></div>
     </div>
-    <p class="text-[11px] text-slate-400 mt-2">Kalau angka bank soal di bawah 337, versi yang terbuka masih versi lama — ketuk "Bersihkan cache &amp; muat ulang" di atas.</p>
+    <p class="text-[11px] text-slate-400 mt-2">Kalau angka bank soal di bawah 360, versi yang terbuka masih versi lama — ketuk "Bersihkan cache &amp; muat ulang" di atas.</p>
   </section>
   <section class="card p-4">
     <h3 class="font-bold mb-2 text-sm">Tentang</h3>
