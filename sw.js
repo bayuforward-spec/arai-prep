@@ -3,11 +3,11 @@
    cache dipakai sebagai cadangan ketika jaringan tidak tersedia. */
 const CACHE = 'arai-prep-v5';
 const ASET = [
-  './', './index.html', './app.js', './manifest.json', './icon.svg',
-  './data/materi.js', './data/tka2025.js',
-  './data/bank-bindo.js', './data/bank-mtk.js', './data/bank-bing.js',
-  './data/bank-bio.js', './data/bank-kim.js',
-  './data/bank-tka25-bio.js', './data/bank-tka25-kim.js', './data/bank-tka25-mtk.js'
+  './', './index.html', './app.js?v=5', './manifest.json', './icon.svg',
+  './data/materi.js?v=5', './data/tka2025.js?v=5',
+  './data/bank-bindo.js?v=5', './data/bank-mtk.js?v=5', './data/bank-bing.js?v=5',
+  './data/bank-bio.js?v=5', './data/bank-kim.js?v=5',
+  './data/bank-tka25-bio.js?v=5', './data/bank-tka25-kim.js?v=5', './data/bank-tka25-mtk.js?v=5'
 ];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASET)).then(() => self.skipWaiting()));

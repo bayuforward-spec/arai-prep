@@ -97,6 +97,10 @@ const BANK = () => (window.BANK_SOAL||[]);
 const soalById = id => BANK().find(q=>q.id===id);
 const namaPanggil = () => (S.profil.nama||'ARAI').split(' ')[0];
 const MAT = () => (window.MATERI||{});
+/* Versi berkas ini. Kalau tidak cocok dengan versi pada index.html, berarti
+   perangkat masih memakai salinan lama salah satu berkas. */
+const VERSI_APPJS = 'v5';
+function versiTidakCocok(){ return String(window.APP_VERSI||'').indexOf(VERSI_APPJS) < 0; }
 function kartuMateri(m,t,ringkas){
   const d = MAT()[m+'|'+t]; if(!d) return '';
   return `<details class="rounded-xl border border-sky-200 bg-sky-50 p-3 mt-3" ${ringkas?'':'open'}>
@@ -330,6 +334,11 @@ function viewBeranda(){
   const sa=S.sesiAktif;
 
   return `
+  ${versiTidakCocok()?`<section class="card p-4 mb-3 border-rose-300 bg-rose-50">
+    <p class="text-xs font-bold text-rose-800"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Sebagian aplikasi masih versi lama</p>
+    <p class="text-xs text-rose-900 mt-1">Perangkat ini menyimpan salinan lama, sehingga ada menu yang belum muncul. Ketuk tombol di bawah untuk memperbarui.</p>
+    <button onclick="paksaMuatUlang()" class="w-full btn bg-rose-600 text-white py-2.5 text-sm mt-2">Perbarui sekarang</button>
+  </section>`:''}
   ${sa?`<section class="card p-4 mb-3 border-amber-300 bg-amber-50">
     <p class="text-xs font-bold text-amber-800"><i class="fa-solid fa-play mr-1"></i>Sesi belum selesai</p>
     <p class="text-sm text-amber-900 mt-1">${esc(sa.judul)} · ${sa.jawaban.filter(x=>x!=null).length}/${sa.ids.length} soal terjawab</p>
@@ -1637,6 +1646,6 @@ function resetData(){
 
 /* ---------- Mulai ---------- */
 window.addEventListener('beforeunload', ()=>{ if(SESI) simpanSesiAktif(); });
-if('serviceWorker' in navigator){ window.addEventListener('load', ()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }
+if('serviceWorker' in navigator){ window.addEventListener('load', ()=>navigator.serviceWorker.register('sw.js?v=5').catch(()=>{})); }
 if(!location.hash) location.hash='#/beranda';
 render();
