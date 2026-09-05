@@ -48,7 +48,13 @@
   </div>
 </header>
 
-<main id="view" class="max-w-3xl mx-auto px-4 -mt-3"></main>
+<main id="view" class="max-w-3xl mx-auto px-4 -mt-3">
+  <div id="memuat" class="card p-6 text-center" style="margin-top:1rem">
+    <p style="font-weight:700">Memuat aplikasi…</p>
+    <p style="font-size:12px;color:#64748b;margin-top:6px">Kalau tulisan ini tidak hilang dalam beberapa detik, ketuk tombol di bawah.</p>
+    <button onclick="paksaMuatUlang()" style="margin-top:12px;background:#4f46e5;color:#fff;border:0;border-radius:12px;padding:10px 16px;font-weight:600">Bersihkan cache &amp; muat ulang</button>
+  </div>
+</main>
 
 <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 no-print z-40">
   <div class="max-w-3xl mx-auto grid grid-cols-5 text-[11px] font-semibold text-slate-500">
@@ -60,6 +66,32 @@
   </div>
 </nav>
 
+<script>
+/* Penangkap galat: layar kosong diganti pesan yang bisa dibaca dan dilaporkan. */
+window.APP_VERSI = 'v4 · 5 Sep 2026';
+function paksaMuatUlang(){
+  try{
+    if('serviceWorker' in navigator){ navigator.serviceWorker.getRegistrations().then(function(rs){ rs.forEach(function(r){ r.unregister(); }); }); }
+    if(window.caches){ caches.keys().then(function(ks){ ks.forEach(function(k){ caches.delete(k); }); }); }
+  }catch(e){}
+  setTimeout(function(){ location.replace(location.pathname + '?v=' + Date.now()); }, 400);
+}
+function tampilkanGalat(pesan){
+  var v = document.getElementById('view');
+  if(!v) return;
+  v.innerHTML = '<div class="card" style="padding:16px;margin-top:16px">'
+    + '<p style="font-weight:800;color:#b91c1c">Aplikasi gagal ditampilkan</p>'
+    + '<p style="font-size:13px;color:#334155;margin-top:6px">Tunjukkan pesan di bawah ini supaya bisa diperbaiki:</p>'
+    + '<pre style="font-size:11px;white-space:pre-wrap;background:#f1f5f9;padding:10px;border-radius:10px;margin-top:8px">'
+    + String(pesan).replace(/[<>]/g,'') + '\n\nVersi: ' + window.APP_VERSI + '</pre>'
+    + '<button onclick="paksaMuatUlang()" style="margin-top:12px;background:#4f46e5;color:#fff;border:0;border-radius:12px;padding:10px 16px;font-weight:600">Bersihkan cache &amp; muat ulang</button>'
+    + '</div>';
+}
+window.addEventListener('error', function(e){
+  var v = document.getElementById('view');
+  if(v && document.getElementById('memuat')) tampilkanGalat((e.message||'galat') + ' @ ' + (e.filename||'').split('/').pop() + ':' + (e.lineno||'?'));
+});
+</script>
 <script src="data/materi.js"></script>
 <script src="data/tka2025.js"></script>
 <script src="data/bank-bindo.js"></script>

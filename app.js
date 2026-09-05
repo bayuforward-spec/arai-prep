@@ -290,6 +290,13 @@ function umpanBalikSesi(H){
    ============================================================= */
 function setNav(r){ document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('on', a.dataset.nav===r)); }
 function render(){
+  try{ renderIsi(); }
+  catch(e){
+    if(typeof tampilkanGalat==='function') tampilkanGalat(e && e.message ? e.message+'\n'+(e.stack||'').split('\n')[1] : e);
+    else $('#view').innerHTML = '<div class="card p-4 text-sm">Terjadi galat: '+esc(String(e))+'</div>';
+  }
+}
+function renderIsi(){
   const rute = (location.hash||'#/beranda').replace('#/','').split('?')[0];
   setNav(rute);
   window.scrollTo(0,0);
@@ -297,6 +304,7 @@ function render(){
   const peta = {beranda:viewBeranda, latihan:viewLatihan, tryout:viewTryout, analisis:viewAnalisis, snbp:viewTarget, target:viewTarget, rapor:viewRapor, tka2025:viewTka2025, materi:viewMateri, simulasi:viewSimulasi, ortu:viewOrtu,
                 rencana:viewRencana, jurnal:viewJurnal, pengaturan:viewPengaturan, kerja:viewKerja, hasil:viewHasil};
   $('#view').innerHTML = (peta[rute]||viewBeranda)();
+  const memuat = document.getElementById('memuat'); if(memuat) memuat.remove();
   if(rute==='kerja') setelahRenderSoal();
 }
 window.addEventListener('hashchange', render);
@@ -1582,7 +1590,19 @@ function viewPengaturan(){
       <label class="btn bg-slate-100 text-slate-700 py-3 text-sm text-center cursor-pointer"><i class="fa-solid fa-upload mr-1"></i>Impor
         <input type="file" accept="application/json" class="hidden" onchange="impor(this)"></label>
     </div>
+    <button onclick="paksaMuatUlang()" class="w-full btn bg-slate-100 text-slate-700 py-3 text-sm mt-2"><i class="fa-solid fa-rotate mr-1"></i>Bersihkan cache &amp; muat ulang</button>
     <button onclick="resetData()" class="w-full btn bg-rose-50 text-rose-600 py-3 text-sm mt-2"><i class="fa-solid fa-trash mr-1"></i>Hapus semua data</button>
+  </section>
+  <section class="card p-4 mb-3">
+    <h3 class="font-bold mb-2">Status aplikasi</h3>
+    <div class="text-xs text-slate-600 space-y-1">
+      <div class="flex justify-between"><span>Versi</span><b>${esc(window.APP_VERSI||'-')}</b></div>
+      <div class="flex justify-between"><span>Bank soal termuat</span><b>${BANK().length} butir</b></div>
+      <div class="flex justify-between"><span>Kartu materi</span><b>${Object.keys(MAT()).length}</b></div>
+      <div class="flex justify-between"><span>Pembahasan TKA 2025</span><b>${Object.values(T25()).reduce((a,b)=>a+b.length,0)} nomor</b></div>
+      <div class="flex justify-between"><span>Mode offline</span><b>${('serviceWorker' in navigator)?'aktif':'tidak didukung'}</b></div>
+    </div>
+    <p class="text-[11px] text-slate-400 mt-2">Kalau angka bank soal di bawah 337, versi yang terbuka masih versi lama — ketuk "Bersihkan cache &amp; muat ulang" di atas.</p>
   </section>
   <section class="card p-4">
     <h3 class="font-bold mb-2 text-sm">Tentang</h3>
